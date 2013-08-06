@@ -1,3 +1,7 @@
+# Author: Simo Zhang
+# Email: simozhan@indiana.edu
+# Usage: python post_mapping_pipeline.py -h #
+
 # Notes: 1. v1.00 ready to use #
 #		 2. complete -s and -RG options
 #		 3. add in fansier logger
