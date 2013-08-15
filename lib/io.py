@@ -2,13 +2,14 @@ from os import makedirs
 from os.path import exists
 from datetime import datetime
 
-def check_file_existence(*filenames) :
+def check_file_existence(logger, verbosity, *filenames) :
 	""" check the existence of a set of files """
 	for filename in filenames :
 		if not exists(filename) :
-			return False, "[IO] Error: cannot find the file: %s" %(filename)
+			logger.error("[IO] cannot find the file: %s" %(filename))
 		else :
-			return True, "[IO] %s ... [checked]" %(filename)
+			if verbosity :
+				logger.debug("[IO] %s ... ... [checked]" %(filename))
 
 def make_dir_if_not_exist(*dirnames) :
 	""" make a set of directories (including those intermediate directories) if not existing """
