@@ -1,0 +1,151 @@
+# bwa.yaml v1.0.0
+
+# README:
+# Globally:
+# 1. Every tags in CAPITAL CASE are reserved KEY WORDS. No changes should be expected to them
+# 2. There must be a space after the colon if there is a value provided, e.g. -t: 4
+# 3. Everything after # will be taken as comments
+
+# Provide the full path to the program you want to run
+# If there are multiple programs you'd like to run, please give the full path to the directory where those programs are installed.
+# For example, you need to give the full path to where Novocraft is installed, if you'd like to run NovoAlign and NovoIndex
+
+PROGRAM: /N/dc/projects/simozhan/software/ngs/mapping/bwa-0.7.5a/bwa
+
+# This section defines the globally default command line settings
+# These settings will be override by ones specified for each of the execution groups in EXECUTION_GROUPS section
+# You can specify subprograms you'd like to run within the program you specified above (see novo.yaml for example)
+# If a set of subprograms is required to run together, you can also put them into a combo, e.g. BWA_SHORT and BWA_MEM (the following)
+# You must provide the correct names of subprograms and the options and arguments along with each subprogram, e.g. alw is not valid subprogram built in BWA
+# If options/arguments are switches (no values provided along with them), you could simply leave it blank like the -M option in bwa mem
+
+DEFAULT_SETTING:
+    BWA_SHORT:
+        aln:
+            -t: 4
+        sampe:
+        samSE:
+    BWA_MEM:
+        mem:
+            -t: 4
+            -M:
+
+# This tells where the root output directory is
+# Create timestamped folder under the root provided above
+# This designs for backup function
+# The structure of the ouput direcotry can be organized either "by_group" or "by individual"
+# "by_group" organizes the folder by the execution group defined in section "EXECUTION_GROUP". The output folder will be look like /N/dc/projects/simozhan/test/es/es1, /N/dc/projects/simozhan/test/cs/cs1, etc
+# "by_individual" organizes the foler ignoring the execution group information. The output folder will be look like /N/dc/projects/simozhan/test/es1, /N/dc/projects/simozhan/test/es2, etc
+# If you specify dated_output to be 1, and strucutre as "by_group", you will get something like /N/dc/projects/simozhan/test/8-16-2013-2-21-35/es/es1, etc
+
+OUTPUT_FOLDER: /N/dc/projects/simozhan/test
+DATED_OUTPUT: 0
+STRUCTURE: by_group
+
+# INDEXING section defines how to index the reference
+# SUBPROGRAM must be specified with the correct name of index subprogram built in the program you specify above
+# SKIP indicates whether or not to avoid indexing step. If true, DB specified next will be used directly
+# DB must be a string you put after -p if BWA index is used, and after -d if NovoIndex is used
+# FASTA gives the reference file in fasta format. Full path is required
+
+INDEXING:
+    SUBPROGRAM: index
+    SKIP: 1
+    DB: /N/dc/projects/simozhan/test/ref/anc       # prefix of the output database if bwa index is used #
+    FASTA: /N/dc/projects/simozhan/hahn/sma/assembly/velvet/k33/contigs.gapclose.fa
+
+# EXECUTION_GROUPS gives the data and customized command line setting
+# The next level under EXECUTION_GROUPS is the name of each of the execution groups, e.g. es, cs, cow
+#   A group can be a set of individuals that run a specifi command line setting
+#   Or it can also be a set of individuals of within a population
+#   Or it can also be a set of replicates of a experimental treatment
+# DATA section gives fastq files by individuals
+#   Individual ID can be any string meaningful to user himself/herself
+#   Each Individual should have pair-end and/or single-end reads. PE_1 represents the one end, while PE_2 represents the other end of the read. SE gives the single end reads
+#   If you get multiple pairs of pair-end reads and multiple single-end reads, you need to merge them first and put the merged file here
+# CUSTOMIZED_SETTING sets the customized options and arguments users want to use in the command line
+#   Options/Arguments that are set in the global default setting above will be overriden
+#   Those that are not will be created
+#   If you want to use the default setting, please refer to the CUSTOMIZED_SETTING section under cow group
+#   If you get multiple combos and you want to try both of them to a group, you can specify both of them here
+#   Again, naming must be correct and valid
+
+EXECUTION_GROUPS:
+    es:
+        DATA:
+            es1:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es1_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es1_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es1.se.noQTrim.bwa_ready.fastq
+            es2:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es2_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es2_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es2.se.noQTrim.bwa_ready.fastq
+            es3:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es3_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es3_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es3.se.noQTrim.bwa_ready.fastq
+            es4:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es4_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es4_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es4.se.noQTrim.bwa_ready.fastq
+            es5:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es5_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es5_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/es/withoutQTrim/es5.se.noQTrim.bwa_ready.fastq
+        CUSTOMIZED_SETTING:
+            BWA_MEM:
+                mem:
+                    -t: 8
+
+    cs:
+        DATA:
+            cs1:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs1_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs1_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs1.se.noQTrim.bwa_ready.fastq
+            cs2:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs2_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs2_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs2.se.noQTrim.bwa_ready.fastq
+            cs4:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs4_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs4_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs4.se.noQTrim.bwa_ready.fastq
+            cs3:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs3_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs3_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs3.se.noQTrim.bwa_ready.fastq
+            cs5:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs5_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs5_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cs/withoutQTrim/cs5.se.noQTrim.bwa_ready.fastq
+        CUSTOMIZED_SETTING:
+            BWA_MEM:
+                mem:
+                    -t: 6
+                    -v: 3
+    cow:
+        DATA:
+            cow1:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow1_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow1_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow1.se.noQTrim.bwa_ready.fastq
+            cow2:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow2_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow2_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow2.se.noQTrim.bwa_ready.fastq
+            cow4:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow4_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow4_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow4.se.noQTrim.bwa_ready.fastq
+            cow3:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow3_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow3_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow3.se.noQTrim.bwa_ready.fastq
+            cow5:
+                PE_1: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow5_R1.noQTrim.bwa_ready.fastq
+                PE_2: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow5_R2.noQTrim.bwa_ready.fastq
+                SE: /N/dc/projects/simozhan/hahn/sma/data_bank/cow/withoutQTrim/cow5.se.noQTrim.bwa_ready.fastq
+        CUSTOMIZED_SETTING:
+            BWA_MEM:
