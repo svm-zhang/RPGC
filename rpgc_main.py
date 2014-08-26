@@ -50,12 +50,5 @@ def main():
 	args = handle_cmd()
 	args.func(args)
 
-#	if args.command == "preqc":
-#		args.func(args)
-#	elif args.command == "map":
-#		print "map"
-#	elif args.command == "s2b":
-#		print "sam2bam"
-
 if __name__ == "__main__":
 	main()
